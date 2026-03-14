@@ -4,24 +4,64 @@ import '../models/contact.dart';
 
 class ContactProvider extends ChangeNotifier {
   final Box<Contact> _box = Hive.box('contacts');
+  String _searchQuery = '';
+  String _selectedGroup = 'All';
 
-  List<Contact> get contacts => _box.values.toList();
+  String get selectedGroup => _selectedGroup;
 
-  // CREATE
-  void addContact(Contact contact) {
-    _box.put(contact.id, contact);
+  List<Contact> get contacts =>
+      _box.values.toList()..sort((a, b) => a.name.compareTo(b.name));
+
+  List<Contact> get filteredContacts => contacts.where((c) {
+        final matchSearch =
+            c.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                c.phone.contains(_searchQuery);
+        final matchGroup =
+            _selectedGroup == 'All' || (c.group ?? 'All') == _selectedGroup;
+        return matchSearch && matchGroup;
+      }).toList();
+
+  Map<String, List<Contact>> get groupedContacts {
+    final Map<String, List<Contact>> grouped = {};
+    for (final c in filteredContacts) {
+      final letter = c.name[0].toUpperCase();
+      grouped.putIfAbsent(letter, () => []).add(c);
+    }
+    return Map.fromEntries(
+        grouped.entries.toList()..sort((a, b) => a.key.compareTo(b.key)));
+  }
+
+  List<Contact> get favorites =>
+      contacts.where((c) => c.isFavorite == true).toList();
+
+  void setSearch(String q) {
+    _searchQuery = q;
     notifyListeners();
   }
 
-  // UPDATE
-  void updateContact(Contact contact) {
-    _box.put(contact.id, contact);
+  void setGroup(String g) {
+    _selectedGroup = g;
     notifyListeners();
   }
 
-  // DELETE
+  void addContact(Contact c) {
+    _box.put(c.id, c);
+    notifyListeners();
+  }
+
+  void updateContact(Contact c) {
+    _box.put(c.id, c);
+    notifyListeners();
+  }
+
   void deleteContact(String id) {
     _box.delete(id);
+    notifyListeners();
+  }
+
+  void toggleFavorite(Contact c) {
+    c.isFavorite = !(c.isFavorite ?? false);
+    c.save();
     notifyListeners();
   }
 }

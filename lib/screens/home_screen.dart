@@ -21,8 +21,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: contacts.isEmpty
           ? const Center(
-              child: Text(
-                'No contacts yet.\nTap + to add one!',
+              child: Text('No contacts yet.\nTap + to add one!',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
@@ -34,17 +33,14 @@ class HomeScreen extends StatelessWidget {
                 return _ContactTile(contact: contact);
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const AddEditScreen()),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.indigo,
+      //   foregroundColor: Colors.white,
+      //   onPressed: () {
+      //     Navigator.push(context, MaterialPageRoute(builder: (_) => const AddEditScreen()),);
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }
@@ -60,13 +56,11 @@ class _ContactTile extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: Colors.indigo,
-        child: Text(
-          contact.name[0].toUpperCase(),
+        child: Text(contact.name[0].toUpperCase(),
           style: const TextStyle(color: Colors.white),
         ),
       ),
-      title: Text(
-        contact.name,
+      title: Text(contact.name,
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(contact.phone),
@@ -78,10 +72,7 @@ class _ContactTile extends StatelessWidget {
             icon: const Icon(Icons.edit, color: Colors.indigo),
             onPressed: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => AddEditScreen(contact: contact),
-                ),
+                context,MaterialPageRoute(builder: (_) => AddEditScreen(contact: contact),),
               );
             },
           ),

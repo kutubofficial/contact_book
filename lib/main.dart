@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'models/contact.dart';
 import 'providers/contact_provider.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,10 +28,10 @@ class MyApp extends StatelessWidget {
       title: 'Contact Book',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6C5CE7)),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const MainScreen(),
     );
   }
 }

@@ -5,8 +5,7 @@ import '../models/contact.dart';
 import '../providers/contact_provider.dart';
 
 class AddEditScreen extends StatefulWidget {
-  final Contact? contact; // null = Add mode, not null = Edit mode
-
+  final Contact? contact;
   const AddEditScreen({super.key, this.contact});
 
   @override
@@ -15,53 +14,40 @@ class AddEditScreen extends StatefulWidget {
 
 class _AddEditScreenState extends State<AddEditScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _nameController;
-  late TextEditingController _phoneController;
-  late TextEditingController _emailController;
+  late TextEditingController _name, _phone, _email;
+  String _group = 'All';
 
   bool get isEditing => widget.contact != null;
 
   @override
   void initState() {
     super.initState();
-    // Pre-fill if editing
-    _nameController = TextEditingController(text: widget.contact?.name ?? '');
-    _phoneController = TextEditingController(text: widget.contact?.phone ?? '');
-    _emailController = TextEditingController(text: widget.contact?.email ?? '');
+    _name = TextEditingController(text: widget.contact?.name ?? '');
+    _phone = TextEditingController(text: widget.contact?.phone ?? '');
+    _email = TextEditingController(text: widget.contact?.email ?? '');
+    _group = widget.contact?.group ?? 'All';
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _phoneController.dispose();
-    _emailController.dispose();
+    _name.dispose();
+    _phone.dispose();
+    _email.dispose();
     super.dispose();
   }
 
   void _save() {
     if (_formKey.currentState!.validate()) {
       final provider = context.read<ContactProvider>();
-
-      if (isEditing) {
-        // UPDATE
-        final updated = Contact(
-          id: widget.contact!.id,
-          name: _nameController.text.trim(),
-          phone: _phoneController.text.trim(),
-          email: _emailController.text.trim(),
-        );
-        provider.updateContact(updated);
-      } else {
-        // CREATE
-        final newContact = Contact(
-          id: const Uuid().v4(),
-          name: _nameController.text.trim(),
-          phone: _phoneController.text.trim(),
-          email: _emailController.text.trim(),
-        );
-        provider.addContact(newContact);
-      }
-
+      final contact = Contact(
+        id: widget.contact?.id ?? const Uuid().v4(),
+        name: _name.text.trim(),
+        phone: _phone.text.trim(),
+        email: _email.text.trim(),
+        group: _group,
+        isFavorite: widget.contact?.isFavorite ?? false,
+      );
+      isEditing ? provider.updateContact(contact) : provider.addContact(contact);
       Navigator.pop(context);
     }
   }
@@ -70,77 +56,73 @@ class _AddEditScreenState extends State<AddEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Contact' : 'Add Contact'),
-        backgroundColor: Colors.indigo,
+        title: Text(isEditing ? 'Edit Contact' : 'New Contact'),
+        backgroundColor: const Color(0xFF6C5CE7),
         foregroundColor: Colors.white,
+        actions: [
+          TextButton(
+              onPressed: _save,
+              child: const Text('Save',
+                  style: TextStyle(color: Colors.white, fontSize: 16))),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              // Name
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  prefixIcon: Icon(Icons.person),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (val) =>
-                    val == null || val.isEmpty ? 'Name is required' : null,
-              ),
-              const SizedBox(height: 16),
-
-              // Phone
-              TextFormField(
-                controller: _phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'Phone',
-                  prefixIcon: Icon(Icons.phone),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (val) =>
-                    val == null || val.isEmpty ? 'Phone is required' : null,
-              ),
-              const SizedBox(height: 16),
-
-              // Email
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (val) =>
-                    val == null || val.isEmpty ? 'Email is required' : null,
+              const SizedBox(height: 10),
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: const Color(0xFF6C5CE7),
+                child: const Icon(Icons.person, color: Colors.white, size: 40),
               ),
               const SizedBox(height: 24),
-
-              // Save Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigo,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  onPressed: _save,
-                  child: Text(
-                    isEditing ? 'Update Contact' : 'Save Contact',
-                    style: const TextStyle(fontSize: 16),
-                  ),
+              _field(_name, 'Name', Icons.person),
+              const SizedBox(height: 16),
+              _field(_phone, 'Phone', Icons.phone, TextInputType.phone),
+              const SizedBox(height: 16),
+              _field(_email, 'Email', Icons.email, TextInputType.emailAddress),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: _group,
+                decoration: InputDecoration(
+                  labelText: 'Group',
+                  prefixIcon: const Icon(Icons.group_outlined),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  filled: true,
+                  fillColor: Colors.grey[50],
                 ),
+                items: ['All', 'Office', 'Family']
+                    .map((g) =>
+                        DropdownMenuItem(value: g, child: Text(g)))
+                    .toList(),
+                onChanged: (val) => setState(() => _group = val!),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _field(TextEditingController c, String label, IconData icon,
+      [TextInputType? type]) {
+    return TextFormField(
+      controller: c,
+      keyboardType: type,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon),
+        border:
+            OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        filled: true,
+        fillColor: Colors.grey[50],
+      ),
+      validator: (val) =>
+          val == null || val.isEmpty ? '$label is required' : null,
     );
   }
 }
