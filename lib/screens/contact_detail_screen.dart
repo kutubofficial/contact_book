@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../models/contact.dart';
 import '../providers/contact_provider.dart';
@@ -23,10 +24,7 @@ class ContactDetailScreen extends StatelessWidget {
                 end: Alignment.bottomRight,
                 colors: [Color(0xFF6C5CE7), Color(0xFF4834D4)],
               ),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(32),
-                bottomRight: Radius.circular(32),
-              ),
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(32),bottomRight: Radius.circular(32),),
             ),
             padding: const EdgeInsets.fromLTRB(20, 52, 20, 30),
             child: Column(
@@ -38,12 +36,12 @@ class ContactDetailScreen extends StatelessWidget {
                       onTap: () => Navigator.pop(context),
                       child: Row(children: [
                         Image.asset('assets/icons/back.png', width: 25, color: Colors.white),
-                        const Text('Contact',style: TextStyle(color: Colors.white, fontSize: 16)),
+                         Text('Contact',style: GoogleFonts.inter(color: Colors.white, fontSize: 16)),
                       ]),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.push( context,MaterialPageRoute( builder: (_) => AddEditScreen(contact: contact))),
-                      child: const Text('Edit', style:TextStyle(color: Colors.white, fontSize: 16)),
+                      child:  Text('Edit', style: GoogleFonts.inter(color: Colors.white, fontSize: 16)),
                     ),
                   ],
                 ),
@@ -51,13 +49,13 @@ class ContactDetailScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 45,
                   backgroundColor: Color.fromRGBO(255, 255, 255, 0.25),
-                  child: Text(contact.name[0].toUpperCase(),style: const TextStyle(color: Colors.white,fontSize: 36,fontWeight: FontWeight.bold)),
+                  child: Text(contact.name[0].toUpperCase(),style: const TextStyle(color: Colors.white,fontSize: 36,fontWeight: FontWeight.w600)),
                 ),
                 const SizedBox(height: 12),
-                Text(contact.name,style: const TextStyle( color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                Text(contact.name,style:  GoogleFonts.inter( color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
                 Text(contact.phone,
-                    style: TextStyle( color: Color.fromRGBO(255, 255, 255, 0.8), fontSize: 14)),
+                    style: GoogleFonts.inter( color: Color.fromRGBO(255, 255, 255, 0.8), fontSize: 14)),
                 const SizedBox(height: 24),
                 //-- Action buttons
                 Row(
@@ -79,15 +77,35 @@ class ContactDetailScreen extends StatelessWidget {
                 _DetailRow(label: 'Mobile', value: contact.phone),
                 _DetailRow(label: 'Email', value: contact.email),
                 _DetailRow(label: 'Group', value: contact.group ?? 'All Contacts'),
+                Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                     Text('Links', style: GoogleFonts.inter( fontWeight: FontWeight.w600, fontSize: 14)),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Image.asset('assets/icons/whatsapp.png',width: 24, height: 24,),
+                        const SizedBox(width: 6),
+                        Image.asset('assets/icons/telegram.png',width: 23.5, height: 23.5,),
+                        const SizedBox(width: 6),
+                        Image.asset('assets/icons/instagram.png',width: 26.5, height: 26.5,),
+                        const SizedBox(width: 6),
+                      ],
+                    ),
+                    const Divider(),
+                  ],
+                ),
                 const SizedBox(height: 8),
-                const Divider(),
+                // const Divider(),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(
                     (contact.isFavorite ?? false) ? Icons.star: Icons.star_outline,
                     color: const Color(0xFF6C5CE7),
                   ),
-                  title: Text((contact.isFavorite ?? false) ? 'Remove from Favorites' : 'Add to Favorites'),
+                  title: Text((contact.isFavorite ?? false) ? 'Remove from Favorites' : 'Add to Favorites',
+                  style: GoogleFonts.inter( fontWeight: FontWeight.w500, fontSize: 14)),
                   onTap: () {
                     provider.toggleFavorite(contact);
                     Navigator.pop(context);
@@ -97,17 +115,18 @@ class ContactDetailScreen extends StatelessWidget {
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.share_outlined, color: Color(0xFF6C5CE7)),
-                  title: const Text('Share Contact'),
+                  title:  Text('Share Contact',style: GoogleFonts.inter( fontWeight: FontWeight.w500, fontSize: 14),),
                   onTap: () {},
                 ),
                 const Divider(height: 0),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Image.asset('assets/icons/delete.png', width: 20, color: Colors.red),
-                  title: const Text('Delete Contact', style: TextStyle(color: Colors.red)),
+                  title:  Text('Delete Contact', style: GoogleFonts.inter(color: Colors.red,fontWeight: FontWeight.w500, fontSize: 14)),
                   onTap: () {
-                    provider.deleteContact(contact.id);
-                    Navigator.pop(context);
+                    // provider.deleteContact(contact.id);
+                    // Navigator.pop(context);
+                    _showDeleteConfirmation(context);
                   },
                 ),
               ],
@@ -117,6 +136,100 @@ class ContactDetailScreen extends StatelessWidget {
       ),
     );
   }
+
+    void _showDeleteConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24),),
+          backgroundColor: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Delete Contact",
+                      style: GoogleFonts.inter(fontSize: 20,fontWeight: FontWeight.w600,color: const Color(0xFF334155),),
+                    ),
+                    InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: const Icon(Icons.close,color: Color(0xFF334155),size: 24,),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                Text(
+                  "Are you sure you want to delete this contact?",
+                  style: GoogleFonts.inter(fontSize: 16,fontWeight: FontWeight.w500,color: const Color(0xFF1E293B),height: 1.4,),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "This action cannot be undone",
+                  style: GoogleFonts.inter(fontSize: 14,fontWeight: FontWeight.w400,color: const Color(0xFF64748B),),
+                ),
+                const SizedBox(height: 8),
+                Divider(color: Color(0xFFE2E8F0)),
+                const SizedBox(height: 8),
+                // Action Buttons
+                Row(
+                  children: [
+                    // Cancel Button
+                    Expanded(
+                      child: SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFEDE9FE),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+                          ),
+                          child: Text(
+                            "Cancel",
+                            style: GoogleFonts.inter(color: const Color(0xFF4834D4),fontSize: 14,fontWeight: FontWeight.w600,),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    // Yes, Delete Button
+                    Expanded(
+                      child: SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                             context.read<ContactProvider>().deleteContact(contact.id);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFDC2626),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+                          ),
+                          child: Text(
+                            "Yes, Delete",
+                            style: GoogleFonts.inter(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w600,),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }
 
 class _ActionBtn extends StatelessWidget {
@@ -136,7 +249,7 @@ class _ActionBtn extends StatelessWidget {
           child: Image.asset(icon, fit: BoxFit.contain),
         ),
         const SizedBox(height: 6),
-        Text(label,style: const TextStyle(color: Colors.white, fontSize: 12)),
+        Text(label,style: GoogleFonts.inter(color: Colors.white, fontSize: 12)),
       ],
     );
   }
@@ -150,13 +263,13 @@ class _DetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label,style: const TextStyle( fontWeight: FontWeight.bold, fontSize: 14)),
+          Text(label,style:  GoogleFonts.inter( fontWeight: FontWeight.w600, fontSize: 14)),
           const SizedBox(height: 4),
-          Text(value, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
+          Text(value, style: GoogleFonts.inter(color: Colors.grey[700], fontSize: 14)),
           const Divider(),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:contact_book/providers/contact_provider.dart';
 import 'package:contact_book/models/contact.dart';
@@ -27,8 +28,8 @@ class ContactsScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('My Contacts',
-                          style: TextStyle( fontSize: 26, fontWeight: FontWeight.w700)),
+                       Text('My Contacts',
+                          style: GoogleFonts.inter( fontSize: 26, fontWeight: FontWeight.w700)),
                       // Text('Total (${provider.contacts.length})',
                       //     style:TextStyle(color: Colors.grey[500], fontSize: 13)),
                     ],
@@ -59,7 +60,7 @@ class ContactsScreen extends StatelessWidget {
                 onChanged: provider.setSearch,
                 decoration: InputDecoration(
                   hintText: 'Search by name or number',
-                  hintStyle: TextStyle(color: Colors.grey[600],fontWeight: FontWeight.w500),
+                  hintStyle: GoogleFonts.inter(color: Colors.grey[600],fontWeight: FontWeight.w500),
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   filled: true,
                   fillColor: Colors.grey[100],
@@ -75,8 +76,8 @@ class ContactsScreen extends StatelessWidget {
             // List
             Expanded(
               child: grouped.isEmpty
-                  ? const Center(
-                      child: Text('No contacts found.',style: TextStyle(color: Colors.grey)))
+                  ?  Center(
+                      child: Text('No contacts found.',style: GoogleFonts.inter(color: Colors.grey)))
                   : ListView.builder(
                       itemCount: grouped.keys.length,
                       itemBuilder: (_, i) {
@@ -86,7 +87,7 @@ class ContactsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(padding:const EdgeInsets.fromLTRB(20, 8, 20, 4),
-                              child: Text(letter,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey[400],fontSize: 13)),
+                              child: Text(letter,style: GoogleFonts.inter(fontWeight: FontWeight.bold,color: Colors.grey[400],fontSize: 13)),
                             ),
                             ...list.map((c) => _ContactTile(contact: c)),
                           ],
@@ -120,7 +121,7 @@ class _GroupTabs extends StatelessWidget {
                 margin: const EdgeInsets.only(right: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),),
-                child: Text(groupName,style: TextStyle(color: selected ? const Color(0xFF6C5CE7) : Colors.grey[600],fontWeight: FontWeight.w600,
+                child: Text(groupName,style: GoogleFonts.inter(color: selected ? const Color(0xFF6C5CE7) : Colors.grey[600],fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -136,11 +137,11 @@ class _GroupTabs extends StatelessWidget {
                 color: const Color(0xFF6C5CE7),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Row(
+              child:  Row(
                 children: [
                   Icon(Icons.add, color: Colors.white, size: 16),
                   SizedBox(width: 4),
-                  Text('New Group',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600,
+                  Text('New Group',style: GoogleFonts.inter(color: Colors.white,fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -160,7 +161,7 @@ class _GroupTabs extends StatelessWidget {
       builder: (ctx) => AlertDialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Add New Group', style: TextStyle(fontWeight: FontWeight.bold)),
+        title:  Text('Add New Group', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
         content: TextField(
           controller: controller,
           autofocus: true,
