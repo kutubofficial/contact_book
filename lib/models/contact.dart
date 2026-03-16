@@ -21,7 +21,7 @@ class Contact extends HiveObject {
     required this.name,
     required this.phone,
     required this.email,
-    this.group = 'All',
+    this.group = 'All Contacts',
     this.isFavorite = false,
   });
 }

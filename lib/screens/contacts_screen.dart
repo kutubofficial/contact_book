@@ -19,9 +19,8 @@ class ContactsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -29,7 +28,7 @@ class ContactsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text('My Contacts',
-                          style: TextStyle( fontSize: 26, fontWeight: FontWeight.bold)),
+                          style: TextStyle( fontSize: 26, fontWeight: FontWeight.w700)),
                       // Text('Total (${provider.contacts.length})',
                       //     style:TextStyle(color: Colors.grey[500], fontSize: 13)),
                     ],
@@ -40,15 +39,18 @@ class ContactsScreen extends StatelessWidget {
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),
-                      child: const Icon(Icons.add,size: 40, color: Color(0xFF6C5CE7),),
+                      child: Image.asset('assets/icons/add.png', width: 44, height: 44),
                     ),
                   )
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-            // Group Tabs
+            const Divider(height: 1, color: Colors.grey),
+            const SizedBox(height: 5),
+            //-- Group Tabs
             _GroupTabs(),
+            const SizedBox(height: 5),
+            const Divider(height: 1, color: Colors.grey),
             const SizedBox(height: 12),
             // Search
             Padding(
@@ -57,6 +59,7 @@ class ContactsScreen extends StatelessWidget {
                 onChanged: provider.setSearch,
                 decoration: InputDecoration(
                   hintText: 'Search by name or number',
+                  hintStyle: TextStyle(color: Colors.grey[600],fontWeight: FontWeight.w500),
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   filled: true,
                   fillColor: Colors.grey[100],
@@ -73,8 +76,7 @@ class ContactsScreen extends StatelessWidget {
             Expanded(
               child: grouped.isEmpty
                   ? const Center(
-                      child: Text('No contacts found.',
-                          style: TextStyle(color: Colors.grey)))
+                      child: Text('No contacts found.',style: TextStyle(color: Colors.grey)))
                   : ListView.builder(
                       itemCount: grouped.keys.length,
                       itemBuilder: (_, i) {
@@ -83,14 +85,8 @@ class ContactsScreen extends StatelessWidget {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(20, 8, 20, 4),
-                              child: Text(letter,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey[400],
-                                      fontSize: 13)),
+                            Padding(padding:const EdgeInsets.fromLTRB(20, 8, 20, 4),
+                              child: Text(letter,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey[400],fontSize: 13)),
                             ),
                             ...list.map((c) => _ContactTile(contact: c)),
                           ],
@@ -101,13 +97,6 @@ class ContactsScreen extends StatelessWidget {
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: const Color(0xFF6C5CE7),
-      //   foregroundColor: Colors.white,
-        // onPressed: () => Navigator.push(context,
-        //     MaterialPageRoute(builder: (_) => const AddEditScreen())),
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 }
@@ -123,7 +112,6 @@ class _GroupTabs extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          // Dynamic group tabs
           ...groups.map((groupName) {
             final selected = provider.selectedGroup == groupName;
             return GestureDetector(
@@ -131,21 +119,14 @@ class _GroupTabs extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.only(right: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  groupName,
-                  style: TextStyle(
-                    color: selected ? const Color(0xFF6C5CE7) : Colors.grey[600],
-                    fontWeight: FontWeight.w600,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),),
+                child: Text(groupName,style: TextStyle(color: selected ? const Color(0xFF6C5CE7) : Colors.grey[600],fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             );
           }),
 
-          // + New Group Button
           GestureDetector(
             onTap: () => _showAddGroupDialog(context, provider),
             child: Container(
@@ -159,11 +140,7 @@ class _GroupTabs extends StatelessWidget {
                 children: [
                   Icon(Icons.add, color: Colors.white, size: 16),
                   SizedBox(width: 4),
-                  Text(
-                    'New Group',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
+                  Text('New Group',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -181,8 +158,9 @@ class _GroupTabs extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('New Group', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Add New Group', style: TextStyle(fontWeight: FontWeight.bold)),
         content: TextField(
           controller: controller,
           autofocus: true,
@@ -190,9 +168,9 @@ class _GroupTabs extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'e.g. Friends, Gym, Work...',
             prefixIcon: const Icon(Icons.group_outlined, color: Color(0xFF6C5CE7)),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(color: Color(0xFF6C5CE7), width: 2),
             ),
           ),
@@ -206,14 +184,12 @@ class _GroupTabs extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF6C5CE7),
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-            ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),),
             onPressed: () {
               final name = controller.text.trim();
               if (name.isNotEmpty) {
                 provider.addGroup(name);
-                provider.setGroup(name); // auto-select new group
+                provider.setGroup(name); 
                 Navigator.pop(ctx);
               }
             },
@@ -246,18 +222,11 @@ class _ContactTile extends StatelessWidget {
       leading: CircleAvatar(
         radius: 24,
         backgroundColor: _color(contact.name),
-        child: Text(contact.name[0].toUpperCase(),
-            style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18)),
+        child: Text(contact.name[0].toUpperCase(),style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18)),
       ),
-      title: Text(contact.name,
-          style: const TextStyle(fontWeight: FontWeight.w600)),
-      subtitle: Text(contact.phone,
-          style: TextStyle(color: Colors.grey[500], fontSize: 13)),
+      title: Text(contact.name,style: const TextStyle(fontWeight: FontWeight.w600)),
+      subtitle: Text(contact.phone,style: TextStyle(color: Colors.grey[500], fontSize: 13)),
       trailing: const Icon(Icons.more_vert, color: Colors.grey),
-      onTap: () => Navigator.push(
-          context,MaterialPageRoute( builder: (_) => ContactDetailScreen(contact: contact))),);
+      onTap: () => Navigator.push(context,MaterialPageRoute( builder: (_) => ContactDetailScreen(contact: contact))),);
   }
 }
