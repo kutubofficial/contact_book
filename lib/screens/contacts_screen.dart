@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/contact_provider.dart';
-import '../models/contact.dart';
+import 'package:contact_book/providers/contact_provider.dart';
+import 'package:contact_book/models/contact.dart';
 import 'add_edit_screen.dart';
 import 'contact_detail_screen.dart';
 
@@ -116,35 +116,114 @@ class _GroupTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ContactProvider>();
-    final groups = ['All', 'Office', 'Family'];
+    final groups = provider.groups;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
-        children: groups.map((groupName) {
-          final selected = provider.selectedGroup == groupName;
-          return GestureDetector(
-            onTap: () => provider.setGroup(groupName),
+        children: [
+          // Dynamic group tabs
+          ...groups.map((groupName) {
+            final selected = provider.selectedGroup == groupName;
+            return GestureDetector(
+              onTap: () => provider.setGroup(groupName),
+              child: Container(
+                margin: const EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  groupName,
+                  style: TextStyle(
+                    color: selected ? const Color(0xFF6C5CE7) : Colors.grey[600],
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            );
+          }),
+
+          // + New Group Button
+          GestureDetector(
+            onTap: () => _showAddGroupDialog(context, provider),
             child: Container(
               margin: const EdgeInsets.only(right: 10),
-              padding:const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                // color: selected? const Color(0xFF6C5CE7): Colors.transparent,
+                color: const Color(0xFF6C5CE7),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(groupName,
-                  style: TextStyle(
-                      color: selected ? const Color(0xFF6C5CE7) : Colors.grey[600],
-                      fontWeight: FontWeight.w600)),
+              child: const Row(
+                children: [
+                  Icon(Icons.add, color: Colors.white, size: 16),
+                  SizedBox(width: 4),
+                  Text(
+                    'New Group',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          );
-        }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAddGroupDialog(BuildContext context, ContactProvider provider) {
+    final controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('New Group', style: TextStyle(fontWeight: FontWeight.bold)),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          textCapitalization: TextCapitalization.words,
+          decoration: InputDecoration(
+            hintText: 'e.g. Friends, Gym, Work...',
+            prefixIcon: const Icon(Icons.group_outlined, color: Color(0xFF6C5CE7)),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF6C5CE7), width: 2),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('Cancel', style: TextStyle(color: Colors.grey[600])),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF6C5CE7),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+            onPressed: () {
+              final name = controller.text.trim();
+              if (name.isNotEmpty) {
+                provider.addGroup(name);
+                provider.setGroup(name); // auto-select new group
+                Navigator.pop(ctx);
+              }
+            },
+            child: const Text('Create'),
+          ),
+        ],
       ),
     );
   }
 }
-
 class _ContactTile extends StatelessWidget {
   final Contact contact;
   const _ContactTile({required this.contact});
@@ -163,8 +242,7 @@ class _ContactTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
       leading: CircleAvatar(
         radius: 24,
         backgroundColor: _color(contact.name),

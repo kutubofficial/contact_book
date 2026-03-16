@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import '../models/contact.dart';
+import 'package:contact_book/models/contact.dart';
 
 class ContactProvider extends ChangeNotifier {
   final Box<Contact> _box = Hive.box('contacts');
   String _searchQuery = '';
-  String _selectedGroup = 'All';
+  String _selectedGroup = 'All Contacts'; 
+
+  
+  final List<String> _groups = ['All Contacts', 'Office', 'Family'];
+  List<String> get groups => _groups;
 
   String get selectedGroup => _selectedGroup;
 
@@ -17,7 +21,7 @@ class ContactProvider extends ChangeNotifier {
             c.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
                 c.phone.contains(_searchQuery);
         final matchGroup =
-            _selectedGroup == 'All' || (c.group ?? 'All') == _selectedGroup;
+            _selectedGroup == 'All Contacts' || (c.group ?? 'All Contacts') == _selectedGroup;
         return matchSearch && matchGroup;
       }).toList();
 
@@ -42,6 +46,13 @@ class ContactProvider extends ChangeNotifier {
   void setGroup(String g) {
     _selectedGroup = g;
     notifyListeners();
+  }
+
+  void addGroup(String groupName) {
+    if (!_groups.contains(groupName)) {
+      _groups.add(groupName);
+      notifyListeners();
+    }
   }
 
   void addContact(Contact c) {

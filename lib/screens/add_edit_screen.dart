@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
-import '../models/contact.dart';
-import '../providers/contact_provider.dart';
+import 'package:contact_book/models/contact.dart';
+import 'package:contact_book/providers/contact_provider.dart';
 
 class AddEditScreen extends StatefulWidget {
   final Contact? contact;
@@ -15,7 +15,7 @@ class AddEditScreen extends StatefulWidget {
 class _AddEditScreenState extends State<AddEditScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _name, _phone, _email;
-  String _group = 'All';
+  String _group = 'All Contacts';
 
   bool get isEditing => widget.contact != null;
 
@@ -25,7 +25,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
     _name = TextEditingController(text: widget.contact?.name ?? '');
     _phone = TextEditingController(text: widget.contact?.phone ?? '');
     _email = TextEditingController(text: widget.contact?.email ?? '');
-    _group = widget.contact?.group ?? 'All';
+    _group = widget.contact?.group ?? 'All Contacts';
   }
 
   @override
@@ -90,15 +90,11 @@ class _AddEditScreenState extends State<AddEditScreen> {
                 decoration: InputDecoration(
                   labelText: 'Group',
                   prefixIcon: const Icon(Icons.group_outlined),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                   filled: true,
                   fillColor: Colors.grey[50],
                 ),
-                items: ['All', 'Office', 'Family']
-                    .map((g) =>
-                        DropdownMenuItem(value: g, child: Text(g)))
-                    .toList(),
+                items: context.read<ContactProvider>().groups .map((g) => DropdownMenuItem(value: g, child: Text(g))).toList(),
                 onChanged: (val) => setState(() => _group = val!),
               ),
             ],

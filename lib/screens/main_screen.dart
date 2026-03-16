@@ -25,6 +25,7 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (i) => setState(() => _index = i),
         selectedItemColor: const Color(0xFF6C5CE7),
         unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.star_outline),
