@@ -26,11 +26,11 @@ class VoicemailScreen extends StatelessWidget {
                           Icon(Icons.record_voice_over_outlined,
                               size: 64, color: Colors.grey),
                           SizedBox(height: 12),
-                          Text('No contacts yet',
+                          Text('No voicemails yet',
                               style: TextStyle(color: Colors.grey)),
                           SizedBox(height: 4),
                           Text(
-                              'Open a contact and tap\n"Add to Voicemail" to see them here',
+                              'Your voicemails will appear here when you receive them.',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.grey, fontSize: 12)),

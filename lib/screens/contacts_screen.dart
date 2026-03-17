@@ -132,7 +132,7 @@ class _GroupTabs extends StatelessWidget {
             onTap: () => _showAddGroupDialog(context, provider),
             child: Container(
               margin: const EdgeInsets.only(right: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 color: const Color(0xFF6C5CE7),
                 borderRadius: BorderRadius.circular(20),
@@ -141,7 +141,7 @@ class _GroupTabs extends StatelessWidget {
                 children: [
                   Icon(Icons.add, color: Colors.white, size: 16),
                   SizedBox(width: 4),
-                  Text('New Group',style: GoogleFonts.inter(color: Colors.white,fontWeight: FontWeight.w600,
+                  Text('New Group',style: GoogleFonts.inter(color: Colors.white,fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],

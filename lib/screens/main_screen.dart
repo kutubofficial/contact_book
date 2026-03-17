@@ -23,10 +23,10 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   static const _navItems = [
-    (icon: Icons.star_outline, activeIcon: Icons.star,label: 'Favorites'),
-    (icon: Icons.contacts_outlined,activeIcon: Icons.contacts,label: 'Contacts'),
+    (icon: Icons.star, activeIcon: Icons.star,label: 'Favorites'), 
+    (icon: Icons.contacts,activeIcon: Icons.contacts,label: 'Contacts'), 
     (icon: Icons.window_sharp,activeIcon: Icons.window_sharp,label: 'Keypad'),
-    (icon: Icons.record_voice_over_outlined,activeIcon: Icons.record_voice_over,label: 'Voicemail'),
+    (icon: Icons.record_voice_over,activeIcon: Icons.record_voice_over,label: 'Voicemail'), 
   ];
 
   @override

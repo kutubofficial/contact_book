@@ -11,7 +11,8 @@ class ContactDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<ContactProvider>();
+    // final provider = context.read<ContactProvider>();
+    final provider = context.watch<ContactProvider>();
 
     return Scaffold(
       body: Column(
@@ -108,7 +109,7 @@ class ContactDetailScreen extends StatelessWidget {
                   style: GoogleFonts.inter( fontWeight: FontWeight.w500, fontSize: 14)),
                   onTap: () {
                     provider.toggleFavorite(contact);
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                 ),
                 const Divider(height: 0),
@@ -156,18 +157,18 @@ class ContactDetailScreen extends StatelessWidget {
                   children: [
                     Text(
                       "Delete Contact",
-                      style: GoogleFonts.inter(fontSize: 20,fontWeight: FontWeight.w600,color: const Color(0xFF334155),),
+                      style: GoogleFonts.inter(fontSize: 20,fontWeight: FontWeight.w600,),
                     ),
                     InkWell(
                       onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.close,color: Color(0xFF334155),size: 24,),
+                      child: const Icon(Icons.close,size: 24,),
                     ),
                   ],
                 ),
                 const SizedBox(height: 30),
                 Text(
                   "Are you sure you want to delete this contact?",
-                  style: GoogleFonts.inter(fontSize: 16,fontWeight: FontWeight.w500,color: const Color(0xFF1E293B),height: 1.4,),
+                  style: GoogleFonts.inter(fontSize: 16,fontWeight: FontWeight.w500,height: 1.4,),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -206,6 +207,7 @@ class ContactDetailScreen extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                              context.read<ContactProvider>().deleteContact(contact.id);
+                            Navigator.pop(context);
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
@@ -267,7 +269,7 @@ class _DetailRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label,style:  GoogleFonts.inter( fontWeight: FontWeight.w600, fontSize: 14)),
+          Text(label,style: GoogleFonts.inter( fontWeight: FontWeight.w600, fontSize: 14)),
           const SizedBox(height: 4),
           Text(value, style: GoogleFonts.inter(color: Colors.grey[700], fontSize: 14)),
           const Divider(),
