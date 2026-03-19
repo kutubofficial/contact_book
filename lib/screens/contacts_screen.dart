@@ -22,30 +22,35 @@ class ContactsScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                       Text('My Contacts',
-                          style: GoogleFonts.inter( fontSize: 26, fontWeight: FontWeight.w700)),
-                      // Text('Total (${provider.contacts.length})',
-                      //     style:TextStyle(color: Colors.grey[500], fontSize: 13)),
+                      Expanded(child: SizedBox.shrink()),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const AddEditScreen()));
+                        },
+                        child: SizedBox(
+                          height: 40, width: 40,
+                          child: Image.asset('assets/icons/add.png',),
+                        ),
+                      ),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const AddEditScreen()));
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Image.asset('assets/icons/add.png', width: 44, height: 44),
-                    ),
-                  )
+                  Row(
+                    children: [
+                      Text('My Contacts',
+                         style: GoogleFonts.inter( fontSize: 26, fontWeight: FontWeight.w700)),
+                      Expanded(child: SizedBox.shrink()),
+
+                    ],
+                  ),
                 ],
               ),
             ),
+            const SizedBox(height: 5),
             const Divider(height: 1, color: Colors.grey),
             const SizedBox(height: 5),
             //-- Group Tabs
@@ -132,7 +137,7 @@ class _GroupTabs extends StatelessWidget {
             onTap: () => _showAddGroupDialog(context, provider),
             child: Container(
               margin: const EdgeInsets.only(right: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: const Color(0xFF6C5CE7),
                 borderRadius: BorderRadius.circular(20),
@@ -142,7 +147,7 @@ class _GroupTabs extends StatelessWidget {
                   Icon(Icons.add, color: Colors.white, size: 16),
                   SizedBox(width: 4),
                   Text('New Group',style: GoogleFonts.inter(color: Colors.white,fontWeight: FontWeight.w500,
-                    ),
+                    fontSize: 12),
                   ),
                 ],
               ),

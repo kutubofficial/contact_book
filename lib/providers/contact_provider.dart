@@ -13,15 +13,11 @@ class ContactProvider extends ChangeNotifier {
 
   String get selectedGroup => _selectedGroup;
 
-  List<Contact> get contacts =>
-      _box.values.toList()..sort((a, b) => a.name.compareTo(b.name));
+  List<Contact> get contacts =>_box.values.toList()..sort((a, b) => a.name.compareTo(b.name));
 
   List<Contact> get filteredContacts => contacts.where((c) {
-        final matchSearch =
-            c.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                c.phone.contains(_searchQuery);
-        final matchGroup =
-            _selectedGroup == 'All Contacts' || (c.group ?? 'All Contacts') == _selectedGroup;
+        final matchSearch = c.name.toLowerCase().contains(_searchQuery.toLowerCase()) || c.phone.contains(_searchQuery);
+        final matchGroup = _selectedGroup == 'All Contacts' || (c.group ?? 'All Contacts') == _selectedGroup;
         return matchSearch && matchGroup;
       }).toList();
 
@@ -31,12 +27,10 @@ class ContactProvider extends ChangeNotifier {
       final letter = c.name[0].toUpperCase();
       grouped.putIfAbsent(letter, () => []).add(c);
     }
-    return Map.fromEntries(
-        grouped.entries.toList()..sort((a, b) => a.key.compareTo(b.key)));
+    return Map.fromEntries(grouped.entries.toList()..sort((a, b) => a.key.compareTo(b.key)));
   }
 
-  List<Contact> get favorites =>
-      contacts.where((c) => c.isFavorite == true).toList();
+  List<Contact> get favorites =>contacts.where((c) => c.isFavorite == true).toList();
 
   void setSearch(String q) {
     _searchQuery = q;
