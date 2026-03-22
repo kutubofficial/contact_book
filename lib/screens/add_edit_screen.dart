@@ -1,3 +1,4 @@
+import 'package:contact_book/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -48,7 +49,8 @@ class _AddEditScreenState extends State<AddEditScreen> {
         isFavorite: widget.contact?.isFavorite ?? false,
       );
       isEditing ? provider.updateContact(contact) : provider.addContact(contact);
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const MainScreen()), (route) => false);
     }
   }
 
@@ -62,8 +64,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
         actions: [
           TextButton(
               onPressed: _save,
-              child: const Text('Save',
-                  style: TextStyle(color: Colors.white, fontSize: 16))),
+              child: const Text('Save', style: TextStyle(color: Colors.white, fontSize: 16))),
         ],
       ),
       body: SingleChildScrollView(

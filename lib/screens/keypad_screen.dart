@@ -1,3 +1,4 @@
+import 'package:contact_book/screens/add_edit_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -47,7 +48,31 @@ class _KeypadScreenState extends State<KeypadScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.only(left:24,top:30),
+              child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(Icons.person_add_alt_1, color: const Color(0xFF6C5CE7),size: 28,),
+                      title: Text('Create new contact',
+                      style: GoogleFonts.inter( fontWeight: FontWeight.w500, fontSize: 22)),
+                      onTap: () {
+                         Navigator.push(context, MaterialPageRoute(builder: (_) => const AddEditScreen()));
+                      },
+                    ),
+            ),
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 1),
+              child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(Icons.person_add_alt_1, color: const Color(0xFF6C5CE7),size: 28,),
+                      title: Text('Add to a contact',
+                      style: GoogleFonts.inter( fontWeight: FontWeight.w500, fontSize: 22)),
+                      onTap: () {
+                         Navigator.push(context, MaterialPageRoute(builder: (_) => const AddEditScreen()));
+                      },
+                    ),
+            ),
+            const Spacer(),
 Padding(
   padding: const EdgeInsets.symmetric(horizontal: 24),
   child: Row(

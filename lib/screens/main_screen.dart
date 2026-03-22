@@ -1,7 +1,7 @@
 import 'package:contact_book/screens/keypad_screen.dart';
 import 'package:contact_book/screens/voicemail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'contacts_screen.dart';
 import 'favorites_screen.dart';
 
@@ -31,10 +31,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   statusBarColor: Colors.white,
+    //   statusBarIconBrightness: Brightness.dark,
+    // ));
 
     return Scaffold(
       body: _screens[_index],
@@ -52,7 +52,8 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: Colors.white,
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed, 
-          items: _navItems.map((item) => _buildNavItem(icon: item.icon,activeIcon: item.activeIcon,label: item.label,)).toList(),
+          items: _navItems.map((item) => 
+          _buildNavItem(icon: item.icon,activeIcon: item.activeIcon,label: item.label,)).toList(),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:contact_book/providers/contact_provider.dart';
 import 'package:contact_book/models/contact.dart';
 import 'add_edit_screen.dart';
 import 'contact_detail_screen.dart';
+import 'package:flutter/services.dart'; 
 
 class ContactsScreen extends StatelessWidget {
   const ContactsScreen({super.key});
@@ -14,93 +15,102 @@ class ContactsScreen extends StatelessWidget {
     final provider = context.watch<ContactProvider>();
     final grouped = provider.groupedContacts;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+    statusBarColor: Colors.white,            
+    statusBarIconBrightness: Brightness.dark, 
+  ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: SizedBox.shrink()),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => const AddEditScreen()));
-                        },
-                        child: SizedBox(
-                          height: 40, width: 40,
-                          child: Image.asset('assets/icons/add.png',),
-                        ),
+                      Row(
+                        children: [
+                          Expanded(child: SizedBox.shrink()),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => const AddEditScreen()));
+                            },
+                            child: SizedBox(
+                              height: 40, width: 40,
+                              child: Image.asset('assets/icons/add.png',),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text('My Contacts',
+                             style: GoogleFonts.inter( fontSize: 26, fontWeight: FontWeight.w700)),
+                          Expanded(child: SizedBox.shrink()),
+            
+                        ],
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Text('My Contacts',
-                         style: GoogleFonts.inter( fontSize: 26, fontWeight: FontWeight.w700)),
-                      Expanded(child: SizedBox.shrink()),
-
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 5),
-            const Divider(height: 1, color: Colors.grey),
-            const SizedBox(height: 5),
-            //-- Group Tabs
-            _GroupTabs(),
-            const SizedBox(height: 5),
-            const Divider(height: 1, color: Colors.grey),
-            const SizedBox(height: 12),
-            // Search
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                onChanged: provider.setSearch,
-                decoration: InputDecoration(
-                  hintText: 'Search by name or number',
-                  hintStyle: GoogleFonts.inter(color: Colors.grey[600],fontWeight: FontWeight.w500),
-                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            // List
-            Expanded(
-              child: grouped.isEmpty
-                  ?  Center(
-                      child: Text('No contacts found.',style: GoogleFonts.inter(color: Colors.grey)))
-                  : ListView.builder(
-                      itemCount: grouped.keys.length,
-                      itemBuilder: (_, i) {
-                        final letter = grouped.keys.elementAt(i);
-                        final list = grouped[letter]!;
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(padding:const EdgeInsets.fromLTRB(20, 8, 20, 4),
-                              child: Text(letter,style: GoogleFonts.inter(fontWeight: FontWeight.bold,color: Colors.grey[400],fontSize: 13)),
-                            ),
-                            ...list.map((c) => _ContactTile(contact: c)),
-                          ],
-                        );
-                      },
+                const SizedBox(height: 5),
+                const Divider(height: 1, color: Colors.grey),
+                const SizedBox(height: 5),
+                //-- Group Tabs
+                _GroupTabs(),
+                const SizedBox(height: 5),
+                const Divider(height: 1, color: Colors.grey),
+                const SizedBox(height: 12),
+                // Search
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextField(
+                    onChanged: provider.setSearch,
+                    decoration: InputDecoration(
+                      hintText: 'Search by name or number',
+                      hintStyle: GoogleFonts.inter(color: Colors.grey[600],fontWeight: FontWeight.w500),
+                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
                     ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // List
+                Expanded(
+                  child: grouped.isEmpty
+                      ?  Center(
+                          child: Text('No contacts found.',style: GoogleFonts.inter(color: Colors.grey)))
+                      : ListView.builder(
+                          itemCount: grouped.keys.length,
+                          itemBuilder: (_, i) {
+                            final letter = grouped.keys.elementAt(i);
+                            final list = grouped[letter]!;
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(padding:const EdgeInsets.fromLTRB(20, 8, 20, 4),
+                                  child: Text(letter,style: GoogleFonts.inter(fontWeight: FontWeight.bold,color: Colors.grey[400],fontSize: 13)),
+                                ),
+                                ...list.map((c) => _ContactTile(contact: c)),
+                              ],
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -115,7 +125,7 @@ class _GroupTabs extends StatelessWidget {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Row(
         children: [
           ...groups.map((groupName) {
