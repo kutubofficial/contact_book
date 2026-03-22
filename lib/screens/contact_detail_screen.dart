@@ -21,6 +21,7 @@ class ContactDetailScreen extends StatelessWidget {
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Column(
           children: [
             Container(
